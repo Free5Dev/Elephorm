@@ -1,30 +1,31 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
 </head>
-
 <body>
-
-
-<table  border="1">
-<?php
-
-
-for( $lig=3  ;  $lig>0 ;  $lig-- )
-{
-echo "<tr>";
-	for( $col=6  ;  $col>0 ;  $col-- )
-		{
-		echo "<td>";
-			echo $lig."-".$col;
-		echo "</td>";
+	<?php 
+		//boucle for
+		for($i=5;$i>0;$i--){
+			echo"Encore ".$i." Tours à faire <br/>";
 		}
-echo "</tr>";
-}
-
-?>
-</table>
+		echo"Fin de boucle";
+	?>
+	<table border="1">
+		<?php 
+			for($lig=5;$lig>0;$lig--){
+				echo"<tr>";
+				for($col=1;$col<=5;$col++){
+					echo"<td>";
+					echo $lig."-".$col;
+					echo "</td>";
+				}
+				echo"</tr>";
+			}
+		?>
+	</table>
 </body>
 </html>

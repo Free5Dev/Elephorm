@@ -1,30 +1,32 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Couleurs indépendantes</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
 </head>
-
 <body>
-<?php
-$couleur=array("00","33","66","99","CC","FF");
-for($rouge=0;$rouge<count($couleur);$rouge++)
-	{
-	echo "<table>";
-	for($vert=0;$vert<count($couleur);$vert++)
-		{
-		echo "<tr>";
-		for($bleu=0;$bleu<count($couleur);$bleu++)
-			{
-			$couleurCellule=$couleur[$rouge].$couleur[$vert].$couleur[$bleu];
-			echo "<td width='100' bgcolor='#".$couleurCellule."'>";
-			  echo $couleurCellule;
-			echo "</td>";
+	<?php 
+		//palette de couleurs independantes des navigateurs
+		$couleurs=array("00","33","66","99","CC","FF");
+		for($rouge=0;$rouge<6;$rouge++){
+			echo"<table border='1'>";
+			for($vert=0;$vert<6;$vert++){
+				echo"<tr>";
+				for($blue=0;$blue<6;$blue++){
+					$couleursCellules=$couleurs[$rouge].$couleurs[$vert].$couleurs[$blue];
+					echo"<td bgcolor='#$couleursCellules'>";
+					echo $couleursCellules;
+					echo"</td>";
+				}
+				echo"</tr>";
 			}
-		echo "</tr>";
+		echo "</table>";
 		}
-	echo "</table>";
-	}
-?>
+		
+		
+
+	?>
 </body>
 </html>

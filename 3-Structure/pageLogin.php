@@ -1,46 +1,41 @@
-﻿<?php
-if(isset($_POST['bouton']))
-{
-	if($_POST['code']=='1234')
-	{
-	header("Location:pagePrivee.php");
-	}
-	else
-	{
-	$erreur="code incorrect";
-	}
-}
+﻿<?php 
+  //verification de la soumission du button
+  if(isset($_POST['btn'])){
+    // verification si logi  et password ne sont pas vide
+    if(!empty($_POST['pseudo'] and $_POST['password'])){
+      //verfication si login et password sont correct
+      if($_POST['pseudo']=="said" and $_POST['password']=='1234'){
+        header("Location:pagePrivee.php");
+      }else{
+        echo"Erreur d'identification reasez";
+      }
+    }else{
+      echo"Les champs sont vide";
+    }
+  }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-
 <body>
-<?php
-//affichage d'un tableau
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-?>
-<?php
-if(isset($erreur)) echo "<h2>VOTRE CODE EST INCORRECT</h2>";
-?>
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <label for="pseudo">Pseudo</label><br/>
+    <input type="text" name="pseudo" id="pseudo"><br/>
+    <label for="password">Password</label><br/>
+    <input type="password" name="password" id="password"><br/><br/>
+    <input type="submit" name="btn" value="Connexion"/>
+    <input type="reset" name="btnAnnuler" value="Annuler"/>
+  </form>
 
-<form id="monform" name="form1" method="post" action="pageLogin.php">
-  <p>
-    <label>Code :
-      <input type="text" name="code"  />
-    </label>
-  </p>
-  
-  <p>
-    <label>
-      <input type="submit" name="bouton"  value="Envoyer" />
-    </label>
-  </p>
-</form>
+  <?php 
+    echo"<pre>";
+    print_r($_POST);
+    echo"</pre>";
+  ?>
 </body>
 </html>

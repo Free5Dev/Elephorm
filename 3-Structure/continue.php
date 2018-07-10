@@ -1,27 +1,24 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
-
 <body>
-<?php
-
-$tour=array(1,1,0,1,1,1,1);
-
-echo "<pre>";
-print_r($tour);
-echo "</pre>";
-
-for(  $i=0 ;  $i<7   ;  $i++ )
-{
-if($tour[$i]==0)  continue ;
-echo "Tour N°".$i." <br/>";
-
-}
+    <?php 
+        //structure break
+        $notes=array(1,1,1,0,1,1,1);
+        for($i=0;$i<count($notes);$i++){
+            if($notes[$i]==0) continue;
+            echo $i." tours <br/>";
+        }
 
 
-?>
+        echo"<pre>";
+        print_r($notes);
+        echo"</pre>";
+    ?>
 </body>
 </html>
