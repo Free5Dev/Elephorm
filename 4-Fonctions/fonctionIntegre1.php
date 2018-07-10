@@ -1,21 +1,23 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
-
 <body>
-<?php
-$notes=array(12,14,15,19,13);
-$nb=count($notes);
-echo $nb;
-for($i=0;$i<$nb;$i++)
-{
-echo "<br/>note : ".$notes[$i];
-}
-
-
-?>
+    <?php 
+        //fucntion integre avec count 
+        $note=array(1,2,2,1,1,0,1,1,1,1);
+    $nb=count($note);
+    echo $nb;
+    for($i=0;$i<$nb;$i++){
+        echo"Econr ".$i." tours à faire<br/>";
+    }
+        echo"<pre>";
+        print_r($note);
+        echo"</pre>";
+    ?>
 </body>
 </html>
