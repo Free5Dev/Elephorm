@@ -1,60 +1,33 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bonjour en php</title>
 </head>
-
 <body>
-<?php
 
-$prenom="jean";
+   <?php 
+        // les variables et leurs types en php
+        $retour="<br/>";
 
-echo gettype($prenom);
-
-echo $prenom;
-
-$retour="<br/>";
-echo $retour;
-
-//-------------------------
-
-$age=35;
-
-echo $age;
-
-echo gettype($age);
-
-echo $retour;
-//-------------------------
-
-$prix=100.50;
-
-echo $prix;
-
-echo gettype($prix);
-
-echo $retour;
-//-------------------------
-
-$reponse=(4==4);
-
-echo $reponse;
-
-echo gettype($reponse);
-
-echo $retour;
-//-------------------------
-
-$tableau[0]=4;
-$tableau[1]=5;
-
-echo $tableau[1];
-
-echo gettype($tableau);
-
-echo $retour;
-
-?>
+        //les chaines de caracteurs
+        $nom="said";
+        echo $nom." est de type ".gettype($nom)." ".$retour;
+        //les entiers
+        $age=25;
+        echo $age." est de type ".gettype($age)." ".$retour;
+        //les booleans
+        $bol=(5==5);
+        echo $bol." est de type ".gettype($bol)." ".$retour;
+         //les array
+         $notes[]=5;
+         echo $notes[0]." est de type ".gettype($notes)." ".$retour;
+         //les decimeaux
+         $dec=5.5;
+         echo $dec." est de type ".gettype($dec)." ".$retour;
+        
+   ?>
 </body>
 </html>

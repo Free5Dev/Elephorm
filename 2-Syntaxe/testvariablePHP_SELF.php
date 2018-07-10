@@ -1,35 +1,24 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-
 <body>
-<form id="monform" name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-  <p>
-    <label>Nom :
-      <input type="text" name="nom"  />
-    </label>
-  </p>
-  <p>
-    <label>Prénom :
-      <input type="text" name="prenom"  />
-    </label>
-  </p>
-  <p>
-    <label>
-      <input type="submit" name="bouton"  value="Envoyer" />
-    </label>
-  </p>
-</form>
-
-
-<?php
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-?>
-
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <label for="pseudo">Pseudo</label><br/>
+    <input type="text" name="pseudo" id="pseudo"><br/>
+    <label for="password">Password</label><br/>
+    <input type="password" name="password" id="password"><br/><br/>
+    <input type="submit" name="btn" value="Connexion"/>
+    <input type="reset" name="btnAnnuler" value="Annuler"/>
+  </form>
+  <?php 
+    echo"<pre>";
+    print_r($_POST);
+    echo "</pre>";
+  ?>
 </body>
 </html>

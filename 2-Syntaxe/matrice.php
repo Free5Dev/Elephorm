@@ -1,41 +1,34 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bonjour en php</title>
 </head>
-
 <body>
-<?php
 
-$ligne1=array(12,15);
-$ligne2=array(14,19);
-$ligne3=array(15,14);
+   <?php 
+        //Les variables en tableaux à deux dimensions au tableaux matrices
+        $ligne1=array(12,14);
+        $ligne2=array(16,18);
+        $ligne3=array(20,22);
 
+        echo "la premiere ligne:".$ligne1[1]." <br/> La deuxième ligne:".$ligne2[1]."<br/>";
+        // function print_r
+        echo "<pre>";
+        print_r($ligne1);
+        print_r($ligne2);
+        echo "</pre>";
+        // function matrice de table
+        $classe=array($ligne1,$ligne2);
+        $classe[]=$ligne3;//ajout de la ligne3 à la classe 
 
-echo "<pre>";
-print_r($ligne1);
-echo "</pre>";
-
-echo "<pre>";
-print_r($ligne2);
-echo "</pre>";
-
-$classe=array($ligne1,$ligne2);
-
-$classe[]=$ligne3;
-
-echo "<pre>";
-print_r($classe);
-echo "</pre>";
-
-echo $classe[0][0];
-echo "<br/>";
-echo $classe[1][1];
-
-
-
-
-?>
+        echo "ceci est la valeur d'un tableaux à deux dimensions ".$classe[1][1];
+        echo"<pre>";
+        print_r($classe);
+        echo "</pre>";
+            
+   ?>
 </body>
 </html>
