@@ -1,77 +1,55 @@
-﻿<?php
-session_start();
-if(!isset($_SESSION['code']))
-{
-header("Location:../login.php");
-}
+﻿<?php 
+  session_start();
+  if(!isset($_SESSION['pseudo']) and !isset($_SESSION['password'])){
+    header("Location:../login.php");
+  }
+  // appel de la function de connexion à la bdd
+  require_once("../connexionMysql.inc.php");
+  // soumission du foorm
+  if(isset($_POST['btnAdd'])){
+    if(!empty($_POST['reference'] and $_POST['prix'] and $_POST['designation'] and $_POST['famille']) and $_FILES['photo']['error']==0){
+      copy($_FILES['photo']['tmp_name'],"../images/".$_FILES['photo']['name']);
+      $reqInsert=$bdd->prepare("INSERT INTO articles SET reference=?,prix=?,designation=?,famillesID=?,photo=?");
+      $reqInsert->execute(array($_POST['reference'],$_POST['prix'],$_POST['designation'],$_POST['famille'],$_FILES['photo']['name']));
+      header("Location:articlesGestion.php");
+    }else{
+      echo"Champs vide";
+    }
+  }
+  // requete du menu deroulant dynamique
+  $reqMenu=$bdd->query("SELECT * FROM familles");
+  echo"<pre>";
+  print_r($_POST);
+  print_r($_FILES);
+  echo"</pre>";
 ?>
-<?php
-require_once("../connexionMysql.inc.php");
-if(isset($_POST['bouton']))
-{
-if($_FILES['photo']['error']==0)
-	{
-		copy(  $_FILES['photo']['tmp_name'] ,  "../images/".$_FILES['photo']['name']  );
-	}
-if($_FILES['photo']['error']==0)
-	$requete="INSERT INTO articles SET reference='".$_POST['reference']."', prix='".$_POST['prix']."',  description='".$_POST['description']."', photo='".$_FILES['photo']['name']."', famillesID='".$_POST['famillesID']."' ";
-else
-	$requete="INSERT INTO articles SET reference='".$_POST['reference']."', prix='".$_POST['prix']."',  description='".$_POST['description']."', famillesID='".$_POST['famillesID']."' ";
-
-	$resultat=mysql_query($requete);
-header("Location:articlesGestion.php");
-}
-//--------------requête du menu
-$requete2="SELECT ID,intitule  FROM familles ";
-$resultat2=mysql_query($requete2);
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-
 <body>
-<a href="articlesGestion.php?logout=ok" >Deconnexion</a>
-<br/>
-
-<form id="monform" name="form1" method="post" enctype="multipart/form-data" action="articlesAjout.php">
-  <p>
-    <label>Référence :
-      <input type="text" name="reference"  />
-    </label>
-  </p>
-  <p>
-    <label>Prix :
-      <input type="text" name="prix"  />
-    </label>
-  </p>
-  <p>
-    <label>Description :
-      <input type="text" name="description"  />
-    </label>
-  </p>
-  <p>
-    <label>Famille :
-      <select name="famillesID" id="famillesID">
- 		<?php while($familles=mysql_fetch_array($resultat2))  { ?>
-    <option  value="<?php echo $familles['ID']; ?>"><?php echo $familles['intitule']; ?></option>
-		<?php } ?>
-   </select>
-    </label>
-  </p>
-  
-  <label>
-  <input type="file" name="photo" id="photo" />
-  </label>
-  
-  <p>
-    <label>
-      <input type="submit" name="bouton"  value="Envoyer" />
-    </label>
-  </p>
-</form>
-
+<a href="articlesGestion.php?logout=ok">Deconnexion</a>
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data"><br/>
+    <label for="reference">Reference</label><br/>
+    <input type="text" name="reference" id="reference" value=""><br/>
+    <label for="prix">Prix</label><br/>
+    <input type="number" name="prix" id="prix"><br/>
+    <label for="designation">Designation</label><br/>
+    <input type="text" name="designation" id="designation"/><br/>
+    <label for="famille">Famille</label><br/>
+    <select name="famille" id="famille">
+    <?php while($donneesMenu=$reqMenu->fetch()) { ?>
+      <option value="<?php echo htmlspecialchars($donneesMenu['id']); ?>"><?php echo htmlspecialchars($donneesMenu['intitule']); ?></option>
+    <?php } $reqMenu->closeCursor(); ?>
+    </select><br/>
+    <label for="photo">Télécharger Photo</label><br/>
+    <input type="file" name="photo" id="photo"><br/><br/>
+    <input type="submit" name="btnAdd" value="Add Articles"/>
+    <input type="reset" name="btnReset" value="Reset"/>
+  </form>
 </body>
 </html>

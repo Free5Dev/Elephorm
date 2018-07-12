@@ -1,83 +1,64 @@
-﻿<?php
-session_start();
-if(!isset($_SESSION['code']))
-{
-header("Location:../login.php");
-}
+﻿<?php 
+  session_start();
+  if(!isset($_SESSION['pseudo']) and !isset($_SESSION['password'])){
+    header("Location:../login.php");
+  }
+  // appel de la function de connexion à la bdd
+  require_once("../connexionMysql.inc.php");
+  // verification de la soumission du formulaire
+  if(isset($_GET['ref'])){
+    $reqSelect=$bdd->prepare("SELECT a.reference,a.prix,a.designation,a.famillesID,a.photo,f.intitule FROM articles as a, familles as f WHERE a.reference=?");
+    $reqSelect->execute(array($_GET['ref']));
+    $donneesSelect=$reqSelect->fetch();
+  }else{
+    //header("Location:articlesGestion.php");
+  }
+  // soumission du foorm
+  if(isset($_POST['btnUpdate'])){
+    if(!empty($_POST['reference'] and $_POST['prix'] and $_POST['designation'] and $_POST['famille']) and $_FILES['photo']['error']==0){
+      copy($_FILES['photo']['tmp_name'],"../images/".$_FILES['photo']['name']);
+      $reqUpdate=$bdd->prepare("UPDATE articles SET prix=?,designation=?,famillesID=?,photo=? WHERE reference=?");
+      $reqUpdate->execute(array($_POST['prix'],$_POST['designation'],$_POST['famille'],$_FILES['photo']['name'],$_POST['reference']));
+      header("Location:articlesGestion.php");
+    }else{
+      echo"Champs vide";
+    }
+  }
+  // requete du menu deroulant dynamique
+  $reqMenu=$bdd->query("SELECT * FROM familles");
+  echo"<pre>";
+  print_r($_POST);
+  print_r($_FILES);
+  echo"</pre>";
 ?>
-<?php
-require_once("../connexionMysql.inc.php");
-if(isset($_POST['bouton']))
-{
-
-if($_FILES['photo']['error']==0)
-	{
-		copy(  $_FILES['photo']['tmp_name'] ,  "../images/".$_FILES['photo']['name']  );
-	}
-if($_FILES['photo']['error']==0)
-$requete="UPDATE articles SET   prix='".$_POST['prix']."' ,  description='".$_POST['description']."' ,photo='".$_FILES['photo']['name']."', famillesID='".$_POST['famillesID']."' WHERE reference='".$_POST['reference']."' " ;
-else
-$requete="UPDATE articles SET   prix='".$_POST['prix']."' ,  description='".$_POST['description']."' , famillesID='".$_POST['famillesID']."' WHERE reference='".$_POST['reference']."' " ;
-
-mysql_query($requete);
-header("Location:articlesGestion.php");
-}
-//--------------requête du menu
-$requete2="SELECT ID,intitule  FROM familles ";
-$resultat2=mysql_query($requete2);
-//--------------requête de la fiche modif
-$requete3="SELECT *  FROM articles  WHERE  reference='".$_GET['reference']."' " ;
-$resultat3=mysql_query($requete3);
-$article=mysql_fetch_array($resultat3);
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-
 <body>
-<a href="articlesGestion.php?logout=ok" >Deconnexion</a>
-<br/>
-
-<form id="monform" name="form1" method="post" enctype="multipart/form-data" action="articlesModif.php">
-  <p>
-    <label>Référence : <input type="hidden" name="reference" value="<?php echo $article['reference']; ?>" >
-      <?php echo $article['reference']; ?>
-    </label>
-  </p>
-  <p>
-    <label>Prix :
-      <input type="text" name="prix"  value="<?php echo $article['prix']; ?>" />
-    </label>
-  </p>
-  <p>
-    <label>Description :
-      <input type="text" name="description"  value="<?php echo $article['description']; ?>" />
-    </label>
-  </p>
-  <p>
-    <label>Famille :
-      <select name="famillesID" id="famillesID">
-  <?php while($familles=mysql_fetch_array($resultat2))  { ?>
-    <option <?php  if($familles['ID']==$article['famillesID']) echo  "selected='selected'"; ?> value="<?php echo $familles['ID']; ?>"><?php echo $familles['intitule']; ?></option>
-  <?php } ?>
-  </select>
-    </label>
-  </p>
-  
-  <img src="../images/<?php  echo $article['photo']; ?>" >
-  
-  <label>
-  <input type="file" name="photo" id="photo" />
-  </label>
-    <p>
-    <label>
-      <input type="submit" name="bouton"  value="Envoyer" />
-    </label>
-  </p>
-</form>
-
+<a href="articlesGestion.php?logout=ok">Deconnexion</a>
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data"><br/>
+    <label for="reference">Reference</label>:
+    <input type="hidden" name="reference" id="reference" value="<?php if(isset($_GET['ref'])) echo $donneesSelect['reference']; ?>"><?php if(isset($_GET['ref'])) echo $donneesSelect['reference']; ?><br/>
+    <label for="prix">Prix</label><br/>
+    <input type="number" name="prix" id="prix" value="<?php if(isset($_GET['ref'])) echo $donneesSelect['prix']; ?>"><br/>
+    <label for="designation">Designation</label><br/>
+    <input type="text" name="designation" id="designation" value="<?php if(isset($_GET['ref'])) echo $donneesSelect['designation']; ?>"/><br/>
+    <label for="famille">Famille</label><br/>
+    <select name="famille" id="famille">
+    <?php while($donneesMenu=$reqMenu->fetch()) { ?>
+      <option <?php if(!isset($donneesSelect['famillesID'])) $donneesSelect['famillesID']=1; if($donneesMenu['id']==$donneesSelect['famillesID']) echo "selected='selected'"; ?> value="<?php echo htmlspecialchars($donneesMenu['id']); ?>"><?php echo htmlspecialchars($donneesMenu['intitule']); ?></option>
+    <?php } $reqMenu->closeCursor(); ?>
+    </select><br/>
+    <img src="../images/<?php if(isset($_GET['ref'])) echo $donneesSelect['photo']; ?>" alt="">
+    <label for="photo">Modifier Photo</label><br/>
+    <input type="file" name="photo" id="photo"><br/><br/>
+    <input type="submit" name="btnUpdate" value="Update Articles"/>
+    <input type="reset" name="btnReset" value="Reset"/>
+  </form>
 </body>
 </html>

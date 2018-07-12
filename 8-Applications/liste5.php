@@ -1,52 +1,53 @@
-﻿<?php
-require_once("connexionMysql.inc.php");
-if(isset($_GET['famille']))
-$requete="SELECT reference,prix  FROM articles WHERE famillesID=".$_GET['famille'] ;
-else
-$requete="SELECT reference,prix  FROM articles ";
-
-$resultat=mysql_query($requete);
-//--------------requête du menu
-$requete2="SELECT ID,intitule  FROM familles ";
-$resultat2=mysql_query($requete2);
+﻿<?php 
+  //appel de la function de connexion a la bdd
+  require_once("connexionMysql.inc.php");
+   // requete de selection
+   $reqSelect=$bdd->query("SELECT reference, prix FROM articles ");
+  // verification de l'existance de family
+  if(isset($_GET['famille'])){
+    $reqSelect=$bdd->prepare("SELECT reference, prix FROM articles WHERE famillesID=?");
+    $reqSelect->execute(array($_GET['famille']));
+  }
+  //requete du men uderoulant
+  $reqMenu=$bdd->query("SELECT * FROM familles"); 
+ 
+  echo"<pre>";
+  print_r($_GET);
+  echo"</pre>";
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-
 <body>
-
-<form id="form1" name="form1" method="get" action="<?php  echo $_SERVER['PHP_SELF']; ?>">
-  <label>Sélectionnez une famille :
-  <select name="famille" id="famille">
-  <?php while($familles=mysql_fetch_array($resultat2))  { ?>
-    <option <?php  if(!isset($_GET['famille'])) $_GET['famille']=1; if($familles['ID']==$_GET['famille']) echo  "selected='selected'"; ?> value="<?php echo $familles['ID']; ?>"><?php echo $familles['intitule']; ?></option>
-  <?php } ?>
-  </select>
-  </label>
-  <label>
-  <input type="submit" name="bouton" id="bouton" value="Envoyer" />
-  </label>
-</form>
-
-<table width="600" border="1" cellspacing="0" cellpadding="5">
-  <tr>
-    <td>Référence</td>
-    <td>Prix</td>
-	<td>Voir la fiche</td>
-  </tr>
-  <?php while($articles=mysql_fetch_array($resultat))  { ?>
-  <tr>
-    <td><?php echo $articles['reference']; ?></td>
-    <td><?php echo $articles['prix']; ?></td>
-	<td><a href="fiche5.php?reference=<?php echo $articles['reference']; ?>" >Voir</a></td>
-  </tr>
-  <?php } ?>
-</table>
-
-
+  <!-- form de recherche  -->
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+    <label for="famille">search of family</label>
+    <select name="famille" id="famille">
+      <?php while($donneesMenu=$reqMenu->fetch()) { ?>
+      <option <?php  if(!isset($_GET['famille'])) $_GET['famille']=1; if($_GET['famille']==$donneesMenu['id']) echo"selected=selected";?> value="<?php echo htmlspecialchars($donneesMenu['id']); ?>"><?php echo htmlspecialchars($donneesMenu['intitule']); ?></option>
+      <?php } $reqMenu->closeCursor(); ?>
+    </select>
+    <input type="submit" value="Search" name="btnSearh"/>
+  </form>
+  <!-- table en html  -->
+  <table border="1" cellspacing="0" cellpadding="1" width="600">
+    <tr>
+      <td>Reference</td>
+      <td>Prix</td>
+      <td>Voir Fiche</td>
+    </tr>
+    <?php while($donneesSelect=$reqSelect->fetch()) { ?>
+    <tr>
+      <td><?php echo htmlspecialchars($donneesSelect['reference']); ?></td>
+      <td><?php echo htmlspecialchars($donneesSelect['prix']); ?></td>
+      <td> <a href="fiche5.php?ref=<?php echo htmlspecialchars($donneesSelect['reference']); ?>">Details</a></td>
+    </tr>
+    <?php } $reqSelect->closeCursor(); ?>
+  </table>
 </body>
 </html>

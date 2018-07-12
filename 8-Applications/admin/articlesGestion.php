@@ -1,55 +1,50 @@
-﻿<?php
-session_start();
-//---Deconnexion
-if(isset($_GET['logout']))
-{
-unset($_SESSION['code']);
-}
-//----Verification login
-if(!isset($_SESSION['code']))
-{
-header("Location:../login.php");
-}
+﻿<?php 
+  session_start();
+  if(isset($_GET['logout'])){
+    unset($_SESSION['pseudo']);
+    unset($_SESSION['password']);
+  }
+  if(!isset($_SESSION['pseudo']) and !isset($_SESSION['password'])){
+    header("Location:../login.php");
+  }
+  
+  // appel de la function de conenxion à la bdd
+  require_once("../connexionMysql.inc.php");
+  
+  // verification de la soumission du lien supprime
+  if(isset($_GET['ref']) and $_GET['supp']=="ok"){
+      $reqSup=$bdd->prepare("DELETE FROM articles WHERE reference=?");
+      $reqSup->execute(array($_GET['ref']));
+  }
+  // requegte de select dans le tableaux
+  $reqSelect=$bdd->query("SELECT reference FROM articles");
 ?>
-<?php
-require_once("../connexionMysql.inc.php");
-//----Requete suppression
-if(isset($_GET['supp']))
-{
-	$requete2="DELETE FROM articles WHERE reference='".$_GET['reference']."' ";
-	mysql_query($requete2);
-}
-//----Requete liste
-$requete="SELECT reference,prix  FROM articles ";
-$resultat=mysql_query($requete);
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Page Admin</title>
 </head>
-
 <body>
-<a href="articlesGestion.php?logout=ok" >Deconnexion</a>
-<br/>
-<a href="articlesAjout.php" >Ajout d'un article </a>
-
-<table width="600" border="1" cellspacing="0" cellpadding="5">
-  <tr>
-    <td>Référence</td>
-    <td>Modif</td>
-	<td>Supp</td>
-  </tr>
-  <?php while($articles=mysql_fetch_array($resultat))  { ?>
-  <tr>
-    <td><?php echo $articles['reference']; ?></td>
-    <td><a href="articlesModif.php?reference=<?php echo $articles['reference']; ?>" >Modif</a></td>
-	<td><a href="articlesGestion.php?reference=<?php echo $articles['reference']; ?>&supp=ok" >Supp</a></td>
-  </tr>
-  <?php } ?>
-</table>
-
-
+  <h1>Page de gestion admin</h1>
+ 
+  <a href="articlesAjout.php">Ajout d'articles</a>
+  <a href="articlesGestion.php?logout=ok">Deconnexion</a>
+  <table border="1" cellspacing="0" cellpadding="1" width="600s">
+    <tr>
+      <td>Reference</td>
+      <td>Modification</td>
+      <td>Suppression</td>
+    </tr>
+    <?php while($donneesSelect=$reqSelect->fetch()) { ?>
+    <tr>
+      <td><?php echo htmlspecialchars($donneesSelect['reference']);  ?></td>
+      <td><a href="articlesModif.php?ref=<?php echo htmlspecialchars($donneesSelect['reference']);  ?>">Modification</a></td>
+      <td><a href="articlesGestion.php?ref=<?php echo htmlspecialchars($donneesSelect['reference']); ?>&supp=ok">Supprime</a></td>
+    </tr>
+    <?php } $reqSelect=$reqSelect->fetch(); ?>
+  </table>
 </body>
 </html>

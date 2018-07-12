@@ -1,32 +1,33 @@
-﻿<?php
-require_once("connexionMysql.inc.php");
-$requete="SELECT reference,prix  FROM articles ";
-$resultat=mysql_query($requete);
+﻿<?php 
+  //appel de la function de connexion a la bdd
+  require_once("connexionMysql.inc.php");
+  // requete de selection
+  $reqSelect=$bdd->query("SELECT reference, prix FROM articles ");
+
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Document sans nom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-
 <body>
-
-<table width="600" border="1" cellspacing="0" cellpadding="5">
-  <tr>
-    <td>Référence</td>
-    <td>Prix</td>
-	<td>Voir la fiche</td>
-  </tr>
-  <?php while($articles=mysql_fetch_array($resultat))  { ?>
-  <tr>
-    <td><?php echo $articles['reference']; ?></td>
-    <td><?php echo $articles['prix']; ?></td>
-	<td><a href="fiche3.php?reference=<?php echo $articles['reference']; ?>" >Voir</a></td>
-  </tr>
-  <?php } ?>
-</table>
-
-
+  <!-- table en html  -->
+  <table border="1" cellspacing="0" cellpadding="1" width="600">
+    <tr>
+      <td>Reference</td>
+      <td>Prix</td>
+      <td>Voir Fiche</td>
+    </tr>
+    <?php while($donneesSelect=$reqSelect->fetch()) { ?>
+    <tr>
+      <td><?php echo htmlspecialchars($donneesSelect['reference']); ?></td>
+      <td><?php echo htmlspecialchars($donneesSelect['prix']); ?></td>
+      <td> <a href="fiche3.php?ref=<?php echo htmlspecialchars($donneesSelect['reference']); ?>">Details</a></td>
+    </tr>
+    <?php } $reqSelect->closeCursor(); ?>
+  </table>
 </body>
 </html>
