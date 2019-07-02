@@ -1,10 +1,14 @@
 <?php 
     if(isset($_POST['btnSubmit'])){
-        if(empty($_POST['pseudo']) || empty($_POST['password'])){
-
+        if(!empty($_POST['pseudo']) && !empty($_POST['password'])){
+            if($_POST['pseudo']=="dev" && $_POST['password']=="1234"){
+                header("Location:pagePrivee.php");
+            }else{
+                $error= "Error for Identification";
+            }
             
         }else{
-            $chps = "Champs vide";
+            $chps= "Champs vide";
         }
     }
 ?>
