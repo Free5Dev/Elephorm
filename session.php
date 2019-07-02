@@ -1,8 +1,5 @@
 <?php 
     session_start();
-    if(!isset($_SESSION['pseudo']) && !isset($_SESSION['password'])){
-        header("Location:loginHeaderSession.php");
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,9 +7,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Private Page</title>
+    <title>Creation de session en php 
+    </title>
 </head>
 <body>
-    <h1>My Private Page</h1>
+    <?php 
+        $_SESSION['log'] = "dev";
+    ?>
+    <h1>Creation de session <a href="session2.php">Ici</a></h1>
+    <h1>Suppression de session <a href="sessionSup.php">Ici</a></h1>
 </body>
 </html>
