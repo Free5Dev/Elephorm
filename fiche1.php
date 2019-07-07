@@ -1,22 +1,9 @@
 <?php 
     // appel de la function de connexion à la bdd
     require_once("connexion.inc.php");
-    // verification de l'existe de la variable get reference
-    if(isset($_GET['ref'])){
-        // requete de select avec les marqueurs nominatifs 
-        $reqSelect = $bdd->prepare("
-            SELECT a.reference, a.prix, a.description, f.intitule 
-            FROM ARTICLES as a
-            INNER JOIN familles as f
-            ON a.famillesID = f.ID
-            WHERE reference = ?
-        ");
-        $reqSelect->execute(array($_GET['ref']));
-        $donnees = $reqSelect->fetch();
-        var_dump($donnees);
-    }else{ //s'il n'ya pas de parametre get on redirrige l'utilisateur
-        header("Location:liste1.php");
-    }
+    // requete de seelct in bdd with clause where
+    $reqSelect = $bdd->query("SELECT * FROM articles WHERE reference = 'ART56'");
+    $donnees = $reqSelect->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,12 +11,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Fiche1</title>
+    <title>Fiche 1</title>
 </head>
 <body>
-     <!-- table en html utilisatant php de dans -->
-     <table border='1' width='600' cellspacing='0' cellpading='1'>
-    <caption><marquee>Liste de fiche article <?php echo $donnees['reference']; ?> </marquee></caption>
+    <table border="1" width="600" cellspacing="0" cellpadding="1">
         <tr>
             <td>Reference</td>
             <td><?php echo $donnees['reference']; ?></td>
@@ -44,7 +29,7 @@
         </tr>
         <tr>
             <td>Famille</td>
-            <td><?php echo $donnees['intitule']; ?></td>
+            <td><?php echo $donnees['famillesID']; ?></td>
         </tr>
     </table>
 </body>

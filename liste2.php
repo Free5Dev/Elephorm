@@ -25,7 +25,7 @@
            
             <td><?php echo $donnees['reference']; ?></td>
             <td><?php echo $donnees['prix']; ?></td>
-            <th><a href="fiche3.php?ref=<?php echo $donnees['reference']; ?>">VOIR</a></th>
+            <th><a href="fiche2.php?ref=<?php echo $donnees['reference']; ?>">VOIR</a></th>
         </tr>
         <?php } $reqSelect->closeCursor(); ?>
     </table>

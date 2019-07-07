@@ -1,22 +1,22 @@
 <?php 
     // appel de la function de connexion à la bdd
     require_once("connexion.inc.php");
-    // verification de l'existe de la variable get reference
+    // verification de la reception du parametre get
     if(isset($_GET['ref'])){
-        // requete de select avec les marqueurs nominatifs 
+        // on affiche la select correspondant au parametre passé dans le get
         $reqSelect = $bdd->prepare("
-            SELECT a.reference, a.prix, a.photo, a.description, f.intitule 
-            FROM ARTICLES as a
-            INNER JOIN familles as f
-            ON a.famillesID = f.ID
-            WHERE reference = ?
+            SELECT a.reference, a.prix, a.description, a.photo, f.intitule 
+            FROM articles as a
+            INNER JOIN familles as f 
+            WHERE a.famillesID = f.ID AND  a.reference = ?
         ");
         $reqSelect->execute(array($_GET['ref']));
-        $donnees = $reqSelect->fetch();
-        var_dump($donnees);
-    }else{ //s'il n'ya pas de parametre get on redirrige l'utilisateur
-        header("Location:liste1.php");
+    }else{
+        // sinnon on redirige l'utilisateur vers la liste des articles
+        header("Location:liste4.php");
     }
+    // requete de seelct in bdd with clause where
+    $donnees = $reqSelect->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,12 +24,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Fiche1</title>
+    <title>Fiche 1</title>
 </head>
 <body>
-     <!-- table en html utilisatant php de dans -->
-     <table border='1' width='600' cellspacing='0' cellpading='1'>
-    <caption><marquee>Liste de fiche article <?php echo $donnees['reference']; ?> </marquee></caption>
+    <table border="1" width="600" cellspacing="0" cellpadding="1">
         <tr>
             <td>Reference</td>
             <td><?php echo $donnees['reference']; ?></td>
@@ -48,7 +46,7 @@
         </tr>
         <tr>
             <td>Photo</td>
-            <td><img src="images/<?php echo $donnees['photo']; ?>" alt="<?php echo $donnees['photo']; ?>"></td>
+            <td><img src="images/<?php echo $donnees['photo']; ?>" alt=""></td>
         </tr>
     </table>
 </body>

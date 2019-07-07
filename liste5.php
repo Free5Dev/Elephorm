@@ -5,9 +5,11 @@
     $reqSelect = $bdd->query("SELECT reference, prix FROM articles ");
     // verification du parametre search 
     if(isset($_GET['search'])){
-        $reqSelect = $bdd->prepare("SELECT reference, prix FROM articles WHERE description LIKE ?");
+        $reqSelect = $bdd->prepare("SELECT reference, prix FROM articles WHERE famillesID LIKE ?");
         $reqSelect->execute(array("%$_GET[search]%"));
     }
+    // requete du menu deroulant
+    $reqMenu = $bdd->query("SELECT * FROM familles");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +22,11 @@
 <body>
     <form method='get' action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <label for="search">Rechercher un article</label>
-        <input type="search" name="search" value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>" id="search">
+       <select name="search" id="search">
+            <?php while($donneesMenu = $reqMenu->fetch()) { ?>
+            <option value="<?php echo $donneesMenu['id'] ?>" <?php if(!isset($_GET['search'])) $_GET['search']=1; if($_GET['search'] ==$donneesMenu['id']) echo "selected='selected'" ?>><?php echo $donneesMenu['intitule']; ?></option>
+            <?php } $reqMenu->closeCursor(); ?>
+       </select>
         <input type="submit" name="btnSearch" value="Search Artciles">
     </form>
     <?php  
@@ -40,7 +46,7 @@
            
             <td><?php echo $donnees['reference']; ?></td>
             <td><?php echo $donnees['prix']; ?></td>
-            <th><a href="fiche4.php?ref=<?php echo $donnees['reference']; ?>">VOIR</a></th>
+            <th><a href="fiche5.php?ref=<?php echo $donnees['reference']; ?>">VOIR</a></th>
         </tr>
         <?php } $reqSelect->closeCursor(); ?>
     </table>

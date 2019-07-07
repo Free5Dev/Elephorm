@@ -5,7 +5,7 @@
     if(isset($_GET['ref'])){
         // on affiche la select correspondant au parametre passé dans le get
         $reqSelect = $bdd->prepare("
-            SELECT a.reference, a.prix, a.description, a.photo, f.intitule 
+            SELECT a.reference, a.prix, a.description, f.intitule 
             FROM articles as a
             INNER JOIN familles as f 
             WHERE a.famillesID = f.ID AND  a.reference = ?
@@ -13,7 +13,7 @@
         $reqSelect->execute(array($_GET['ref']));
     }else{
         // sinnon on redirige l'utilisateur vers la liste des articles
-        header("Location:liste3.php");
+        header("Location:liste2.php");
     }
     // requete de seelct in bdd with clause where
     $donnees = $reqSelect->fetch();
@@ -43,10 +43,6 @@
         <tr>
             <td>Famille</td>
             <td><?php echo $donnees['intitule']; ?></td>
-        </tr>
-        <tr>
-            <td>Photo</td>
-            <td><img src="images/<?php echo $donnees['photo']; ?>" alt=""></td>
         </tr>
     </table>
 </body>

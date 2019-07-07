@@ -1,8 +1,10 @@
 <?php 
     try{
-        $bdd = new PDO('mysql:host=localhost;dbname=catalogue;', 'root', '');
-    }catch(PDOException $e){ //en cas d'erreur von arret tout et on affiche l'erreur 
-        print("Erreur:".$e->getMessage()."<br/>");
+        $bdd = new PDO('mysql:host=localhost; dbname=catalogue; charset=utf8', 'root', '', array(
+            PDO::ATTR_PERSISTENT => true
+        ));
+    }catch(PDOException $e){
+        print "Erreur !:".$e->getMessage()."<br/>";
         die();
     }
 ?>

@@ -1,8 +1,8 @@
 <?php 
     // appel de la function de connexion à la bdd
-    require_once('connexion.inc.php');
-    // requete de selection à la bdd
-    $reqSelect = $bdd->query("SELECT * FROM ARTICLES ");
+    require_once("connexion.inc.php");
+    // query select in bdd 
+    $reqSelect = $bdd->query("SELECT reference, prix FROM articles ");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,22 +10,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Liste d'ensemble</title>
+    <title>Liste des articles 1</title>
 </head>
 <body>
-    <table border='1' width='600' cellspacing='0' cellpadding='1'>
+    <table width='600' border='1' cellspacing='0' cellpadding='1'>
         <tr>
-            <td>Reference</td>
-            <td>Prix</td>
-            <td>Details</td>
+            <th>Reference</th>
+            <th>Prix</th>
+           
         </tr>
-        <?php while($donnees =$reqSelect->fetch()) { ?>
+        <?php while($donnees = $reqSelect->fetch()) { ?>
         <tr>
-            <td><?php echo $donnees['reference']; ?> </td>
-            <td><?php echo $donnees['prix']; ?> </td>
-            <td><a href="fiche1.php?ref=<?php echo $donnees['reference']; ?>">Voir</a></td>
+           
+            <td><?php echo $donnees['reference']; ?></td>
+            <td><?php echo $donnees['prix']; ?></td>
         </tr>
-        <?php  } $reqSelect->closeCursor(); ?>
+        <?php } $reqSelect->closeCursor(); ?>
     </table>
 </body>
 </html>

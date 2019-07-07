@@ -13,7 +13,7 @@
         $reqSelect->execute(array($_GET['ref']));
     }else{
         // sinnon on redirige l'utilisateur vers la liste des articles
-        header("Location:liste3.php");
+        header("Location:liste5.php");
     }
     // requete de seelct in bdd with clause where
     $donnees = $reqSelect->fetch();
