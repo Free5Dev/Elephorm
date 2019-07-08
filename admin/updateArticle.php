@@ -1,4 +1,8 @@
 <?php 
+    session_start();
+    if(isset($_GET['logout'])){
+        unset($_SESSION['login']); unset($_SESSION['password']);
+    }
     // function de connexion à la bdd
     require_once("../connexion.inc.php");
 
@@ -13,14 +17,16 @@
     }
     // si on soumet le btn add 
     if(isset($_POST['btnUpdate'])){
-        if(!empty($_POST['reference']) && !empty($_POST['prix']) && !empty($_POST['description'])){
+        if(!empty($_POST['reference']) && !empty($_POST['prix']) && !empty($_POST['description']) && $_FILES['photo']['error'] == 0){
+            copy($_FILES['photo']['tmp_name'], '../images/'.$_FILES['photo']['name']);
             $reqUpdate = $bdd->prepare("
-                UPDATE  articles SET  prix= ?, description= ?, famillesID= ? WHERE reference= ?
+                UPDATE  articles SET  prix= ?, description= ?, famillesID= ?, photo = ? WHERE reference= ?
             ");
             $reqUpdate->execute(array(
                 $_POST['prix'],
                  $_POST['description'],
                 $_POST['familles'],
+                $_FILES['photo']['name'],
                 $_POST['reference']
             ));
             header("Location:index.php");
@@ -39,7 +45,8 @@
 </head>
 <body>
     <h1>Formulaire de modification  d'un article</h1>
-    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <a href="index.php?logout=deconnexion">Deconnexion</a>
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype='multipart/form-data'>
         <div class="group">
             <label for="reference">Reference</label><br/>
             <input type="text" name="reference" value="<?php if(isset($_GET['ref'])) echo $_GET['ref']; ?>" id="reference">
@@ -59,6 +66,10 @@
                 <option <?php if(!isset($_GET['ref'])) $donneesSelect['famillesID'] = 1;   if($donneesMenu['id'] == $donneesSelect['famillesID'] ) echo "selected= 'selected' "; ?> value="<?php echo $donneesMenu['id']; ?>"><?php echo $donneesMenu['intitule']; ?></option>
                 <?php } $reqMenu->closeCursor(); ?>
             </select>
+        </div>
+        <img src="../images/<?php if(isset($_GET['ref'])) echo $donneesSelect['photo']; ?>" alt="<?php echo $donneesSelect['photo']; ?>" style='width:300px;'>
+        <div class="group">
+            <label for="photo">Download Photo</label><input type="file" name="photo" id="photo">
         </div>
         <input type="submit" name="btnUpdate" value="ADD">
     </form>

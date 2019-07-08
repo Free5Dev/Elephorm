@@ -1,4 +1,11 @@
 <?php 
+    session_start();
+    if(isset($_GET['logout'])){
+        unset($_SESSION['login']); unset($_SESSION['password']);
+    }
+    if(!isset($_SESSION['login']) && !isset($_SESSION['password'])){
+        header("Location:../registration.php");
+    }
     // appel de la function de connexion à la bdd qui tiens en comptes du chemin du repertoire 
     require_once("../connexion.inc.php");
     
@@ -21,6 +28,7 @@
 </head>
 <body>
     <p><a href="addArticle.php">Ajout d'un article</a></p>
+    <a href="index.php?logout=deconnexion">Deconnexion</a>
     <table border="1" cellspacing="0" cellpadding="0" width="600">
         <caption>Gestion des articles </caption>
         <tr>

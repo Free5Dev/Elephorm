@@ -1,21 +1,26 @@
 <?php 
+    session_start();
     // function de connexion à la bdd
     require_once("../connexion.inc.php");
-
+    if(isset($_GET['logout'])){
+        unset($_SESSION['login']); unset($_SESSION['password']);
+    }
     // requete du menu deroulant 
     $reqMenu = $bdd->query("SELECT * FROM familles");
     // si on soumet le btn add 
     if(isset($_POST['btnAdd'])){
-        if(!empty($_POST['reference']) && !empty($_POST['prix']) && !empty($_POST['description'])){
+        if(!empty($_POST['reference']) && !empty($_POST['prix']) && !empty($_POST['description']) && $_FILES['photo']['error']==0){
+            copy($_FILES['photo']['tmp_name'], '../images/'.$_FILES['photo']['name']);
             $reqInsert = $bdd->prepare("
-                INSERT INTO articles(reference,prix,description,famillesID)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO articles(reference,prix,description,famillesID, photo)
+                VALUES (?, ?, ?, ?, ?)
             ");
             $reqInsert->execute(array(
                 $_POST['reference'],
                 $_POST['prix'],
                  $_POST['description'],
-                $_POST['familles']
+                $_POST['familles'],
+                $_FILES['photo']['name']
             ));
            header("Location:index.php");
        }else{
@@ -33,7 +38,8 @@
 </head>
 <body>
     <h1>Formulaire d'ajout d'un article</h1>
-    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <a href="index.php?logout=deconnexion">Deconnexion</a>
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype='multipart/form-data' >
         <div class="group">
             <label for="reference">Reference</label><br/>
             <input type="text" name="reference" id="reference">
@@ -54,12 +60,16 @@
                 <?php } $reqMenu->closeCursor(); ?>
             </select>
         </div>
+        <div class="group">
+            <label for="photo">Download Photo</label><input type="file" name="photo" id="photo">
+        </div>
         <input type="submit" name="btnAdd" value="ADD">
     </form>
 
     <?php  
         echo"<pre>";
         print_r($_POST);
+        print_r($_FILES);
         echo "</pre>";
     ?>
 </body>
